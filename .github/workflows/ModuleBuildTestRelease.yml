@@ -22,7 +22,7 @@ env:
 jobs:
   Build_Stage_Package_Module:
     name: Package Module
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,9 +44,9 @@ jobs:
             Write-Output "No new version of Microsoft365DSC found. Skipping build."
             exit 1
           }
-        shell: pwsh
+        shell: powershell
       - name: Build & Package Module
-        shell: pwsh
+        shell: powershell
         run: './build.ps1 -ResolveDependency -Tasks Build' # Pack' -> Changed from Pack to Build. Pack does not work with nested required modules.
         env:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
