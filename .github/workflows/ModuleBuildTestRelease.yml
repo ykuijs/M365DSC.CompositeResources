@@ -68,7 +68,7 @@ jobs:
 
           Publish-Module @PublishModuleParams
 
-          Write-Output "Unregistring Output repository"
+          Write-Output "Removing Output repository"
           $null = Unregister-PSRepository -Name output -ErrorAction SilentlyContinue
         env:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
