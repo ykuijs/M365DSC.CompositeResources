@@ -1,0 +1,32 @@
+TOPIC
+    about_M365DSC.CompositeResources
+
+SHORT DESCRIPTION
+    Microsoft365DSC Composite Resources module
+
+LONG DESCRIPTION
+    This module contains Composite Resources for all workloads of the Microsoft365DSC module. Each Composite
+    Resource contains references to all resources that are available for that workload in the current version
+    of Microsoft365DSC. It is therefore important to use the same version of Microsoft365DSC.
+
+EXAMPLES
+    Add the Build task 'Generate_Composite_Resource_Module' to your build.yaml, like so:
+
+    build:
+      - Clean
+      - Build_Module_ModuleBuilder
+      - Build_NestedModules_ModuleBuilder
+      - Create_changelog_release_output
+      - Generate_Composite_Resource_Module
+
+NOTE:
+    Thank you to all those who contributed to this module, by writing code, sharing opinions, and provided feedback.
+
+TROUBLESHOOTING NOTE:
+    Look out on the Github repository for issues and new releases.
+
+SEE ALSO
+    - https://github.com/ykuijs/M365DSC.CompositeResources
+
+KEYWORDS
+    Desired State Configuration, DSC, M365DSC, Microsoft365DSC, Microsoft 365, Composite Resource
