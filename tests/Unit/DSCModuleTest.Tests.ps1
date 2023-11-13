@@ -177,17 +177,17 @@ BeforeAll {
 
 Describe 'Checking the M365DSC.CompositeResources module' {
     It 'Can the module be loaded correctly' {
-        Get-Module -Name M365DSC.CompositeResources -ListAvailable -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        Get-Module -Name 'M365DSC.CompositeResources' -ListAvailable -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
     }
 
     It 'Number of resources should match the number of resource folders in the module' {
-        $resourcesCount = (Get-DscResource -Module M365DSC.CompositeResources).Count
+        $resourcesCount = (Get-DscResource -Module 'M365DSC.CompositeResources').Count
         $resourcePath = Join-Path -Path $outputFolder -ChildPath 'M365DSC.CompositeResources\*\DscResources\*'
         $folderCount = (Get-ChildItem -Path $resourcePath -Directory).Count
 
         $folderCount  | Should -Not -BeNullOrEmpty
         $resourcesCount | Should -Not -BeNullOrEmpty
-        $folderCount | Should -Be $resourcesCount
+        $resourcesCount | Should -Be $folderCount
     }
 }
 
