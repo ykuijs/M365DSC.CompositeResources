@@ -16,4 +16,5 @@
     'Sampler.GitHubTasks' = 'latest'
     MarkdownLinkCheck     = 'latest'
     'M365DSC.CRG'         = 'latest'
+    'DscBuildHelpers'     = 'latest'
 }
