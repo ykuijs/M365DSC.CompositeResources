@@ -34,9 +34,8 @@ jobs:
           $m365dscCRModule = Find-Module M365DSC.CompositeResources -ErrorAction SilentlyContinue
           if ($m365dscModule.Version -gt $m365dscCRModule.Version)
           {
-            Write-Output "Version of Microsoft365DSC is newer than M365DSC.CompositeResources. Installing Microsoft365DSC and generating new module."
+            Write-Output "Version of Microsoft365DSC is newer than M365DSC.CompositeResources:"
             Write-Output "Microsoft365DSC: v$($m365dscModule.Version) / M365DSC.CompositeResources: v$($m365dscCRModule.Version)"
-            Install-Module Microsoft365DSC -Confirm:$false -Force
             Write-Output "ModuleVersion=$($m365dscModule.Version.ToString())" >> $env:GITHUB_OUTPUT
           }
           else
@@ -47,7 +46,30 @@ jobs:
         shell: powershell
       - name: Build & Package Module
         shell: powershell
-        run: './build.ps1 -ResolveDependency -Tasks Build' # Pack' -> Changed from Pack to Build. Pack does not work with nested required modules.
+        run: |
+          ./build.ps1 -ResolveDependency -Tasks Build # Pack' -> Changed from Pack to Build. Pack does not work with nested required modules.
+
+          Write-Output "Registring Output repository: $OutputDirectory"
+          $RepositoryParams = @{
+            Name            = 'output'
+            SourceLocation  = $OutputDirectory
+            PublishLocation = $OutputDirectory
+            ErrorAction     = 'Stop'
+          }
+          $null = Register-PSRepository @RepositoryParams
+
+          Write-Output "Publishing module to output repository: $BuiltModuleBase"
+          $PublishModuleParams = @{
+            Path            = $BuiltModuleBase
+            Repository      = 'output'
+            ErrorAction     = 'Stop'
+            Force           = $true
+          }
+
+          Publish-Module @PublishModuleParams
+
+          Write-Output "Unregistring Output repository"
+          $null = Unregister-PSRepository -Name output -ErrorAction SilentlyContinue
         env:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
       - name: Publish Build Artifact
@@ -75,7 +97,6 @@ jobs:
       - name: Run Tests
         shell: powershell
         run: |
-          Install-Module Microsoft365DSC -Confirm:$false -Force
           ./build.ps1 -Tasks Test
         env:
           ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
