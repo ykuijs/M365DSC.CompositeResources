@@ -49,18 +49,19 @@ jobs:
         run: |
           ./build.ps1 -ResolveDependency -Tasks Build # Pack' -> Changed from Pack to Build. Pack does not work with nested required modules.
 
-          Write-Output "Registring Output repository: $OutputDirectory"
+          $module = Get-Module M365DSC.CompositeResources -ListAvailable
+          Write-Output "Registring Output repository: $($env:GITHUB_WORKSPACE)"
           $RepositoryParams = @{
             Name            = 'output'
-            SourceLocation  = $OutputDirectory
-            PublishLocation = $OutputDirectory
+            SourceLocation  = $env:GITHUB_WORKSPACE
+            PublishLocation = $env:GITHUB_WORKSPACE
             ErrorAction     = 'Stop'
           }
           $null = Register-PSRepository @RepositoryParams
 
-          Write-Output "Publishing module to output repository: $BuiltModuleBase"
+          Write-Output "Publishing module to output repository: $($module.ModuleBase)"
           $PublishModuleParams = @{
-            Path            = $BuiltModuleBase
+            Path            = $module.ModuleBase
             Repository      = 'output'
             ErrorAction     = 'Stop'
             Force           = $true
