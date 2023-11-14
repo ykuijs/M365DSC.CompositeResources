@@ -17,5 +17,4 @@
     MarkdownLinkCheck     = 'latest'
     'M365DSC.CRG'         = 'latest'
     'DscBuildHelpers'     = 'latest'
-    'Microsoft365DSC'     = 'latest'
 }
