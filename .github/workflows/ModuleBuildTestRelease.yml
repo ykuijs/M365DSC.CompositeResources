@@ -189,7 +189,7 @@ jobs:
       - name: Publish Release
         shell: pwsh
         run: |
-          Get-ChildItem
+          Install-Module Microsoft365DSC -Confirm:$false -Force
           ./build.ps1 -Tasks Publish
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
