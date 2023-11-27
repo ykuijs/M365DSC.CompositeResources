@@ -11,6 +11,8 @@ on:
     #tags-ignore:
     #- '*-*'
   pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 
 env:
   buildFolderName: output
@@ -30,19 +32,68 @@ jobs:
       - name: Calculate ModuleVersion (GitVersion)
         id: GitVersion
         run: |
-          $m365dscModule = Find-Module Microsoft365DSC
-          $m365dscCRModule = Find-Module M365DSC.CompositeResources -ErrorAction SilentlyContinue
-          if ($m365dscModule.Version -gt $m365dscCRModule.Version)
+          $m365dscModule = Find-Module -Name Microsoft365DSC
+          $m365dscCRModule = Find-Module -Name M365DSC.CompositeResources -ErrorAction SilentlyContinue
+          $m365dscCRGModule = Find-Module -Name M365DSC.CRG
+
+          [Version]$m365dscVersion = $m365dscModule.Version
+          $m365dscVersionRevision = $m365dscVersion.Revision.ToString()
+          $m365dscVersion = [Version]::new($m365dscVersion.Major, $m365dscVersion.Minor, $m365dscVersion.Build, 0)
+
+          [Version]$m365dscCRVersion = $m365dscCRModule.Version
+          $m365dscCRVersionRevision = $m365dscCRVersion.Revision.ToString()
+          $m365dscCRVersion = [Version]::new($m365dscCRVersion.Major, $m365dscCRVersion.Minor, $m365dscCRVersion.Build, 0)
+
+          if (($m365dscCRVersion -gt $m365dscCRVersion) -or `
+              ($m365dscCRVersion -eq $m365dscCRVersion -and $m365dscVersionRevision -ne $m365dscCRVersionRevision[0]))
           {
-            Write-Output "Version of Microsoft365DSC is newer than M365DSC.CompositeResources. Installing Microsoft365DSC and generating new module:"
-            Write-Output "Microsoft365DSC: v$($m365dscModule.Version) / M365DSC.CompositeResources: v$($m365dscCRModule.Version)"
+            Write-Output "Version of Microsoft365DSC is newer than M365DSC.CompositeResources."
+            Write-Output " "
+            Write-Output "Versions:"
+            Write-Output "Microsoft365DSC           : v$($m365dscModule.Version)"
+            Write-Output "M365DSC.CompositeResources: v$($m365dscCRModule.Version)"
+            Write-Output " "
+
+            $newVersion = "{0}00" -f $m365dscModule.Version
+            Write-Output "New M365DSC.CompositeResources version: v$($newVersion.ToString())"
+            Write-Output " "
+
+            Write-Output "Installing Microsoft365DSC and generating new module:"
             Install-Module Microsoft365DSC -Confirm:$false -Force
-            Write-Output "ModuleVersion=$($m365dscModule.Version.ToString())" >> $env:GITHUB_OUTPUT
+            Write-Output "ModuleVersion=$($newVersion.ToString())" #>> $env:GITHUB_OUTPUT
           }
           else
           {
-            Write-Output "No new version of Microsoft365DSC found. Skipping build."
-            exit 1
+            Write-Output "Version of Microsoft365DSC is older than or the same as M365DSC.CompositeResources."
+            Write-Output " "
+            Write-Output "Versions:"
+            Write-Output "Microsoft365DSC           : v$($m365dscModule.Version)"
+            Write-Output "M365DSC.CompositeResources: v$($m365dscCRModule.Version)"
+            Write-Output " "
+
+            if ($m365dscCRGModule.PublishedDate -gt $m365dscCRModule.PublishedDate)
+            {
+              Write-Output "PublishedDate of module M365DSC.CRG is newer than M365DSC.CompositeResources."
+              Write-Output " "
+              Write-Output "PublishedDates:"
+              Write-Output "M365DSC.CRG               : $("{0:yyyy}-{0:MM}-{0:dd} {0:HH}:{0:mm}:{0:ss}" -f $m365dscCRGModule.PublishedDate)"
+              Write-Output "M365DSC.CompositeResources: $("{0:yyyy}-{0:MM}-{0:dd} {0:HH}:{0:mm}:{0:ss}" -f $m365dscCRModule.PublishedDate)"
+              Write-Output " "
+
+              $oldVersion = [Version]$m365dscCRModule.Version
+              $newVersion = [Version]::new($oldVersion.Major,$oldVersion.Minor,$oldVersion.Build,$oldVersion.Revision + 1)
+              Write-Output "New M365DSC.CompositeResources version: v$($newVersion.ToString())"
+              Write-Output " "
+
+              Write-Output "Installing Microsoft365DSC and generating new module."
+              Install-Module Microsoft365DSC -Confirm:$false -Force
+              Write-Output "ModuleVersion=$($newVersion.ToString())" >> $env:GITHUB_OUTPUT
+            }
+            else
+            {
+              Write-Output "No new version of Microsoft365DSC found. Skipping build."
+              exit 1
+            }
           }
         shell: powershell
       - name: Build & Package Module
@@ -137,10 +188,3 @@ jobs:
           ReleaseBranch: ${{ env.defaultBranch }}
           MainGitBranch: ${{ env.defaultBranch }}
           ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
-      - name: Send Changelog PR
-        shell: pwsh
-        run: './build.ps1 -Tasks Create_ChangeLog_GitHub_PR'
-        env:
-          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          ReleaseBranch: ${{ env.defaultBranch }}
-          MainGitBranch: ${{ env.defaultBranch }}
