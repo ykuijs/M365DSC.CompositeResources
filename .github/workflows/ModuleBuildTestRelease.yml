@@ -40,11 +40,19 @@ jobs:
           $m365dscVersionRevision = $m365dscVersion.Revision.ToString()
           $m365dscVersion = [Version]::new($m365dscVersion.Major, $m365dscVersion.Minor, $m365dscVersion.Build, 0)
 
-          [Version]$m365dscCRVersion = $m365dscCRModule.Version
-          $m365dscCRVersionRevision = $m365dscCRVersion.Revision.ToString()
-          $m365dscCRVersion = [Version]::new($m365dscCRVersion.Major, $m365dscCRVersion.Minor, $m365dscCRVersion.Build, 0)
+          if ($null -ne $m365dscCRModule)
+          {
+            [Version]$m365dscCRVersion = $m365dscCRModule.Version
+            $m365dscCRVersionRevision = $m365dscCRVersion.Revision.ToString()
+            $m365dscCRVersion = [Version]::new($m365dscCRVersion.Major, $m365dscCRVersion.Minor, $m365dscCRVersion.Build, 0)
+          }
+          else
+          {
+            $m365dscCRVersion = [Version]'0.0.0.0'
+            $m365dscCRModule = @{ Version = $m365dscCRVersion }
+          }
 
-          if (($m365dscCRVersion -gt $m365dscCRVersion) -or `
+          if (($m365dscVersion -gt $m365dscCRVersion) -or `
               ($m365dscCRVersion -eq $m365dscCRVersion -and $m365dscVersionRevision -ne $m365dscCRVersionRevision[0]))
           {
             Write-Output "Version of Microsoft365DSC is newer than M365DSC.CompositeResources."
@@ -60,7 +68,7 @@ jobs:
 
             Write-Output "Installing Microsoft365DSC and generating new module:"
             Install-Module Microsoft365DSC -Confirm:$false -Force
-            Write-Output "ModuleVersion=$($newVersion.ToString())" #>> $env:GITHUB_OUTPUT
+            Write-Output "ModuleVersion=$($newVersion.ToString())" >> $env:GITHUB_OUTPUT
           }
           else
           {
