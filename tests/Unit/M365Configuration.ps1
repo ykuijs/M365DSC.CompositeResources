@@ -6,7 +6,7 @@ Configuration M365Configuration
 
     node localhost
     {
-        $aadAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'AAD' }
+        $aadAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'AzureAD' }
         $exchangeAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Exchange' }
         $intuneAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Intune' }
         $officeAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Office365' }
@@ -17,8 +17,8 @@ Configuration M365Configuration
         $sharepointAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'SharePoint' }
         $teamsAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Teams' }
 
-        Write-Log -Message 'Compiling AAD' -Level 1 -Type Verbose
-        AAD 'AAD_Configuration'
+        Write-Log -Message 'Compiling AzureAD' -Level 1 -Type Verbose
+        AzureAD 'AAD_Configuration'
         {
             ApplicationId         = $aadAppCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
