@@ -110,6 +110,7 @@ jobs:
         run: |
           ./build.ps1 -ResolveDependency -Tasks Build # Pack' -> Changed from Pack to Build. Pack does not work with nested required modules.
 
+          <# Commenting out because of issues with publishing. DscBuildHelpers module is required.
           $module = Get-Module M365DSC.CompositeResources -ListAvailable
           $OutputDirectory = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath 'output'
           Write-Output "Registring Output repository: $OutputDirectory"
@@ -133,6 +134,7 @@ jobs:
 
           Write-Output "Removing Output repository"
           $null = Unregister-PSRepository -Name output -ErrorAction SilentlyContinue
+          #>
         env:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
       - name: Publish Build Artifact
