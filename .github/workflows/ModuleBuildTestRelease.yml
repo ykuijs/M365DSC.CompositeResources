@@ -101,11 +101,12 @@ jobs:
             else
             {
               Write-Output "No new version of Microsoft365DSC found. Skipping build."
-              exit 1
+              Write-Output "SkipWorkflow=true" >> $env:GITHUB_OUTPUT
             }
           }
         shell: powershell
       - name: Build & Package Module
+        if: steps.GitVersion.outputs.SkipWorkflow != 'true'
         shell: powershell
         run: |
           ./build.ps1 -ResolveDependency -Tasks Build # Pack' -> Changed from Pack to Build. Pack does not work with nested required modules.
@@ -138,18 +139,21 @@ jobs:
         env:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
       - name: Publish Build Artifact
+        if: steps.GitVersion.outputs.SkipWorkflow != 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
     outputs:
       ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
+      SkipWorkflow: ${{ steps.GitVersion.outputs.SkipWorkflow }}
 
   Test_Stage_test_windows_ps:
     name: Windows (Windows PowerShell)
     runs-on: windows-latest
     needs:
       - Build_Stage_Package_Module
+    if: needs.Build_Stage_Package_Module.outputs.SkipWorkflow != 'true'
     steps:
       - uses: actions/checkout@v4
         with:
