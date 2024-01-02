@@ -68,9 +68,9 @@ BeforeAll {
                 switch ($splitData[0])
                 {
                     'String' {
-                        if ($splitData.Count -eq 3)
+                        if ($splitData.Count -eq 4)
                         {
-                            $possibleOptions = $splitData[2] -split ' / '
+                            $possibleOptions = $splitData[3] -split ' / '
                             $newString = "'$($possibleOptions[0])'"
                         }
                         else
@@ -79,9 +79,9 @@ BeforeAll {
                         }
                     }
                     'StringArray' {
-                        if ($splitData.Count -eq 3)
+                        if ($splitData.Count -eq 4)
                         {
-                            $possibleOptions = $splitData[2] -split ' / '
+                            $possibleOptions = $splitData[3] -split ' / '
                             $newString = "@('$($possibleOptions[0])')"
                         }
                         else
@@ -90,9 +90,9 @@ BeforeAll {
                         }
                     }
                     'UInt64' {
-                        if ($splitData.Count -eq 3)
+                        if ($splitData.Count -eq 4)
                         {
-                            $possibleOptions = $splitData[2] -split ' / '
+                            $possibleOptions = $splitData[3] -split ' / '
                             $newString = "'$($possibleOptions[0])'"
                         }
                         else
@@ -101,9 +101,9 @@ BeforeAll {
                         }
                     }
                     'UInt32' {
-                        if ($splitData.Count -eq 3)
+                        if ($splitData.Count -eq 4)
                         {
-                            $possibleOptions = $splitData[2] -split ' / '
+                            $possibleOptions = $splitData[3] -split ' / '
                             $newString = "'$($possibleOptions[0])'"
                         }
                         else
@@ -112,9 +112,9 @@ BeforeAll {
                         }
                     }
                     'UInt16' {
-                        if ($splitData.Count -eq 3)
+                        if ($splitData.Count -eq 4)
                         {
-                            $possibleOptions = $splitData[2] -split ' / '
+                            $possibleOptions = $splitData[3] -split ' / '
                             $newString = "'$($possibleOptions[0])'"
                         }
                         else
@@ -123,9 +123,9 @@ BeforeAll {
                         }
                     }
                     'SInt32' {
-                        if ($splitData.Count -eq 3)
+                        if ($splitData.Count -eq 4)
                         {
-                            $possibleOptions = $splitData[2] -split ' / '
+                            $possibleOptions = $splitData[3] -split ' / '
                             $newString = "'$($possibleOptions[0])'"
                         }
                         else
@@ -138,6 +138,9 @@ BeforeAll {
                     }
                     'DateTime' {
                         $newString = "'$((Get-Date).ToString())'"
+                    }
+                    'Guid' {
+                        $newString = "'$((New-Guid).ToString())'"
                     }
                     'PSCredential' {
                         $newString = "(New-Object System.Management.Automation.PSCredential ('username', (ConvertTo-SecureString 'password' -AsPlainText -Force)))"
@@ -162,6 +165,7 @@ BeforeAll {
     $configurationData = Invoke-Command -ScriptBlock $sb
 
     $configurationData.AllNodes[0].CertificateFile = (Join-Path -Path $outputFolder -ChildPath 'tests\Unit\DSCCertificate.cer')
+    $configurationData.NonNodeData.AppCredentials[0].CertThumbprint = '65E427769F27CDA198231B2A7FF03940897FB687'
 
     Write-Log -Message 'Checking module path' -Type Verbose
     if (($env:PSModulePath -like "*$outputFolder") -eq $false)

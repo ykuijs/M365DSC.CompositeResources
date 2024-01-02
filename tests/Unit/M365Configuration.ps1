@@ -6,96 +6,76 @@ Configuration M365Configuration
 
     node localhost
     {
-        $aadAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'AzureAD' }
-        $exchangeAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Exchange' }
-        $intuneAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Intune' }
-        $officeAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Office365' }
-        $onedriveAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'OneDrive' }
-        $plannerAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Planner' }
-        $powerplatformAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'PowerPlatform' }
-        $securitycomplianceAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'SecurityCompliance' }
-        $sharepointAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'SharePoint' }
-        $teamsAppCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'Teams' }
+        $appCreds = $ConfigurationData.NonNodeData.AppCredentials | Where-Object -FilterScript { $_.Workload -eq 'AzureAD' }
 
-        Write-Log -Message 'Compiling AzureAD' -Level 1 -Type Verbose
         AzureAD 'AAD_Configuration'
         {
-            ApplicationId         = $aadAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $aadAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling Exchange' -Level 1 -Type Verbose
         Exchange 'Exchange_Configuration'
         {
-            ApplicationId         = $exchangeAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $exchangeAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling Intune' -Level 1 -Type Verbose
         Intune 'Intune_Configuration'
         {
-            # Credential    = $Credentials.Intune
-            ApplicationId         = $intuneAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $intuneAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling Office365' -Level 1 -Type Verbose
         Office365 'Office365_Configuration'
         {
-            ApplicationId         = $officeAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $officeAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling OneDrive' -Level 1 -Type Verbose
         OneDrive 'OneDrive_Configuration'
         {
-            ApplicationId         = $onedriveAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $onedriveAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling Planner' -Level 1 -Type Verbose
         Planner 'Planner_Configuration'
         {
-            ApplicationId         = $plannerAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $plannerAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling PowerPlatform' -Level 1 -Type Verbose
         PowerPlatform 'PowerPlatform_Configuration'
         {
-            ApplicationId         = $powerplatformAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $powerplatformAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling SecurityCompliance' -Level 1 -Type Verbose
         SecurityCompliance 'SecurityCompliance_Configuration'
         {
-            ApplicationId         = $securitycomplianceAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $securitycomplianceAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling SharePoint' -Level 1 -Type Verbose
         SharePoint 'SharePoint_Configuration'
         {
-            ApplicationId         = $sharepointAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $sharepointAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
 
-        Write-Log -Message 'Compiling Teams' -Level 1 -Type Verbose
         Teams 'Teams_Configuration'
         {
-            ApplicationId         = $teamsAppCreds.ApplicationId
+            ApplicationId         = $appCreds.ApplicationId
             TenantId              = $ConfigurationData.NonNodeData.Environment.TenantId
-            CertificateThumbprint = $teamsAppCreds.CertThumbprint
+            CertificateThumbprint = $appCreds.CertThumbprint
         }
     }
 }
