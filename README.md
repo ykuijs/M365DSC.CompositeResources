@@ -19,7 +19,7 @@ For example:
 
 ### M365DSC.CompositeResources
 
-For the version number of M365DSC.CompositeResource, we are adding a counter of two digits (starting at zero) to the end of the release counter.
+For the version number of M365DSC.CompositeResource, we are adding a counter of two digits (starting at zero) to the end of the release counter. When additional releases are necessary for a version, we increase that added counter.
 
 For example:
 - For Microsoft365DSC v1.24.313.1, the first release of M365DSC.CompositeResources will be 1.24.313.100.
