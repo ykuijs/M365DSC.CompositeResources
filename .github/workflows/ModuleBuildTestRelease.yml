@@ -141,7 +141,7 @@ jobs:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
       - name: Publish Build Artifact
         if: steps.GitVersion.outputs.SkipWorkflow != 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
@@ -160,7 +160,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
@@ -172,7 +172,7 @@ jobs:
         env:
           ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
       - name: Publish Test Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
           name: CodeCoverageWinPS51
@@ -189,7 +189,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
