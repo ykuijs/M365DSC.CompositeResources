@@ -1,7 +1,7 @@
 # M365DSC.CompositeResources
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/ykuijs/M365DSC.CompositeResources/ModuleBuildTestRelease.yml)
-[![PowerShell Gallery (with prereleases)](https://img.shields.io/powershellgallery/v/M365DSC.CompositeResources.svg?include_prereleases&label=M365DSC.CompositeResources%20Preview)](https://www.powershellgallery.com/packages/M365DSC.CompositeResources
+[![PowerShell Gallery (with prereleases)](https://img.shields.io/powershellgallery/v/M365DSC.CompositeResources.svg?include_prereleases&label=M365DSC.CompositeResources%20Preview)](https://www.powershellgallery.com/packages/M365DSC.CompositeResources)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/M365DSC.CompositeResources.svg?&label=M365DSC.CompositeResources)](https://www.powershellgallery.com/packages/M365DSC.CompositeResources)
 ![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/M365DSC.CompositeResources)
 
