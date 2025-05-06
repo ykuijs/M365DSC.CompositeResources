@@ -7,12 +7,12 @@
         }
     }
 
-    InvokeBuild           = 'latest'
+    InvokeBuild           = '5.12.2' #'latest' (https://github.com/gaelcolas/Sampler/issues/509)
     PSScriptAnalyzer      = 'latest'
     Pester                = 'latest'
-    ModuleBuilder         = 'latest' #'3.1.0'
+    ModuleBuilder         = '3.1.0' #'latest' (https://github.com/gaelcolas/Sampler/issues/509)
     ChangelogManagement   = 'latest'
-    Sampler               = 'latest' #'0.118.1'
+    Sampler               = '0.118.1' #'latest' (https://github.com/gaelcolas/Sampler/issues/509)
     'Sampler.GitHubTasks' = 'latest'
     MarkdownLinkCheck     = 'latest'
     'M365DSC.CRG'         = 'latest'
