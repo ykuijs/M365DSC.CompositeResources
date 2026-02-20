@@ -171,6 +171,11 @@ jobs:
           ./build.ps1 -Tasks Test
         env:
           ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
+      - name: Publish Logging
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ env.buildFolderName }}/
+          name: Logging
       - name: Publish Test Artifact
         uses: actions/upload-artifact@v4
         with:
