@@ -173,7 +173,7 @@ jobs:
         env:
           ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
       - name: Publish Logging
-        if: steps.RunTests.outcome == 'failure'
+        if: failure() && steps.RunTests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           path: ${{ env.buildFolderName }}/
