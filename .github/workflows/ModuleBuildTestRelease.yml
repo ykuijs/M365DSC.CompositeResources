@@ -28,7 +28,7 @@ jobs:
     name: Package Module
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Calculate ModuleVersion (GitVersion)
@@ -141,7 +141,7 @@ jobs:
           ModuleVersion: ${{ steps.GitVersion.outputs.ModuleVersion }}
       - name: Publish Build Artifact
         if: steps.GitVersion.outputs.SkipWorkflow != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
@@ -156,11 +156,11 @@ jobs:
       - Build_Stage_Package_Module
     if: needs.Build_Stage_Package_Module.outputs.SkipWorkflow != 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
@@ -174,12 +174,12 @@ jobs:
           ModuleVersion: ${{ needs.Build_Stage_Package_Module.outputs.ModuleVersion }}
       - name: Publish Logging
         if: failure() && steps.RunTests.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           path: ${{ env.buildFolderName }}/
           name: Logging
       - name: Publish Test Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           path: ${{ env.buildFolderName }}/${{ env.testResultFolderName }}/
           name: CodeCoverageWinPS51
@@ -192,11 +192,11 @@ jobs:
       - Test_Stage_test_windows_ps
     if: (success() && ((github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/')) && (contains(github.repository_owner, 'ykuijs')))
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ env.buildArtifactName }}
           path: ${{ env.buildFolderName }}/
