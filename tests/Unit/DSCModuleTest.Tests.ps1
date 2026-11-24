@@ -75,7 +75,14 @@ BeforeAll {
                         }
                         else
                         {
-                            $newString = "'Test'"
+                            if ($replaceString -like '*date time*' -or $replaceString -like '*datetime*')
+                            {
+                                $newString = "'$((Get-Date).ToString('o'))'"
+                            }
+                            else
+                            {
+                                $newString = "'Test'"
+                            }
                         }
                     }
                     'StringArray' {
@@ -122,6 +129,17 @@ BeforeAll {
                             $newString = '5'
                         }
                     }
+                    'SInt64' {
+                        if ($splitData.Count -eq 4)
+                        {
+                            $possibleOptions = $splitData[3] -split ' / '
+                            $newString = "'$($possibleOptions[0])'"
+                        }
+                        else
+                        {
+                            $newString = '5'
+                        }
+                    }
                     'SInt32' {
                         if ($splitData.Count -eq 4)
                         {
@@ -137,7 +155,7 @@ BeforeAll {
                         $newString = '$true'
                     }
                     'DateTime' {
-                        $newString = "'$((Get-Date).ToString())'"
+                        $newString = "'$((Get-Date).ToString('o'))'"
                     }
                     'Guid' {
                         $newString = "'$((New-Guid).ToString())'"
